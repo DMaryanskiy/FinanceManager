@@ -26,6 +26,8 @@ def main():
 
     app.add_handler(CommandHandler("balance", handlers.balance))
 
+    app.add_handler(CommandHandler("category", handlers.category))
+
     app.run_polling()
 
 try:
