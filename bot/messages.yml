@@ -3,3 +3,10 @@ GREETINGS: Hi! I'm a bot which can help you to manage your expenses and income!
 CURRENCY: Choose a currency and wallet.
 
 CURRENCY_BUTTON: You've chosen {} currency. Now you can add expenses and check your balance.
+
+BALANCE: Your balance - {} {}.
+        Your daily limit - {} {}.
+        Your weekly limit - {} {}.
+        Your monthly limit - {} {}.
+
+BALANCE_BAD: Choose a currency before checking balance and limits!

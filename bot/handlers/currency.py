@@ -4,8 +4,8 @@ from telegram.ext import ContextTypes
 
 from config import PROPERTIES
 from .response import send_response
-from services import get_all_currencies
-from .singleton import CurrencySingleton
+from services.currency import get_all_currencies
+from singleton import CurrencySingleton
 
 async def currency(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await send_response(

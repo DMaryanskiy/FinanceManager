@@ -1,3 +1,3 @@
 GET_CURRENCIES: SELECT * FROM currency;
 
-RETRIEVE_BUDGET: SELECT * FROM budget JOIN currency ON budget.currency = currency.id WHERE currency.currency = {};
+RETRIEVE_BUDGET: SELECT * FROM budget JOIN currency ON budget.currency = currency.id WHERE currency.currency = '{}';

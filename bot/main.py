@@ -24,6 +24,8 @@ def main():
     app.add_handler(CommandHandler("currency", handlers.currency))
     app.add_handler(CallbackQueryHandler(handlers.currency_button))
 
+    app.add_handler(CommandHandler("balance", handlers.balance))
+
     app.run_polling()
 
 try:

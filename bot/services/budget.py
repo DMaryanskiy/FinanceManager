@@ -3,7 +3,7 @@ from typing import Optional
 
 from db import fetch_one
 from config import QUERIES
-from handlers.singleton import CurrencySingleton
+from singleton import CurrencySingleton
 
 @dataclass
 class Budget:
@@ -14,10 +14,9 @@ class Budget:
     monthly: int
     balance: int
 
-async def retrieve_budget() -> Optional[Budget]:
+async def retrieve_balance() -> Optional[Budget]:
     currency = CurrencySingleton()
-    if not currency:
+    if not hasattr(currency, "data"):
         return None
     budget = await fetch_one(QUERIES["RETRIEVE_BUDGET"].format(currency.data))
     return Budget(**budget)
-
