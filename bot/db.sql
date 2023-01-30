@@ -3,7 +3,12 @@ create table currency (
     currency varchar(255)
 );
 
-create table category (
+create table category_outcome (
+    codename varchar(255),
+    name varchar(255)
+);
+
+create table category_income (
     codename varchar(255),
     name varchar(255)
 );
@@ -24,9 +29,18 @@ create table expense (
     amount integer,
     created datetime,
     category varchar(255),
-    raw_text text,
     currency integer,
-    FOREIGN KEY(category) REFERENCES category(codename),
+    FOREIGN KEY(category) REFERENCES category_outcome(codename),
+    FOREIGN KEY(currency) REFERENCES currency(id)
+);
+
+create table income (
+    id integer primary key,
+    amount integer,
+    created datetime,
+    category varchar(255),
+    currency integer,
+    FOREIGN KEY(category) REFERENCES category_income(codename),
     FOREIGN KEY(currency) REFERENCES currency(id)
 );
 
@@ -36,7 +50,7 @@ values
     (2, "EUR"),
     (3, "USD");
 
-insert into category (codename, name)
+insert into category_outcome (codename, name)
 values
     ("products", "продукты"),
     ("coffee", "кофе"),
@@ -49,6 +63,13 @@ values
     ("transport", "транспорт"),
     ("games", "игры"),
     ("travel", "путешествия");
+
+insert into category_income (codename, name)
+values
+    ("salary", "праздники"),
+    ("festival", "праздники"),
+    ("social", "пособия"),
+    ("family", "семья");
 
 insert into budget (id, currency, daily, weekly, monthly, balance)
 values

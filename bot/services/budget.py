@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 from db import fetch_one
-from config import QUERIES
+from config import QUERIES, CURRENCY_MAP
 from singleton import CurrencySingleton
 
 @dataclass
@@ -18,5 +18,5 @@ async def retrieve_balance() -> Optional[Budget]:
     currency = CurrencySingleton()
     if not hasattr(currency, "data"):
         return None
-    budget = await fetch_one(QUERIES["RETRIEVE_BUDGET"].format(currency.data))
+    budget = await fetch_one(QUERIES["RETRIEVE_BUDGET"], {"currency": CURRENCY_MAP[currency.data]})
     return Budget(**budget)

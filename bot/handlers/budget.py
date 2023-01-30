@@ -12,7 +12,7 @@ async def balance(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await send_response(
             update,
             context,
-            PROPERTIES["BALANCE_BAD"]
+            PROPERTIES["CURRENCY_BAD"]
         )
     else:
         currency = CurrencySingleton()

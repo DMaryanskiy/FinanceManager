@@ -1,5 +1,29 @@
 GET_CURRENCIES: SELECT * FROM currency;
 
-RETRIEVE_BUDGET: SELECT * FROM budget JOIN currency ON budget.currency = currency.id WHERE currency.currency = '{}';
+RETRIEVE_BUDGET: SELECT *
+                FROM budget
+                WHERE currency = :currency;
 
-GET_CATEGORIES: SELECT * FROM category;
+GET_CATEGORIES_EXPENSE: SELECT * FROM category_outcome;
+
+GET_CATEGORIES_INCOME: SELECT * FROM category_income;
+
+ADD_EXPENSE: >
+            INSERT INTO {} (amount, created, category, currency)
+            values
+                (:amount, :created, :category, :currency);
+
+REDUCE_BALANCE: >
+                UPDATE budget
+                SET
+                balance = balance - :amount,
+                daily = daily - :amount,
+                weekly = weekly - :amount,
+                monthly = monthly - :amount
+                WHERE currency = :currency;
+
+ADD_BALANCE: >
+                UPDATE budget
+                SET
+                balance = balance + :amount
+                WHERE currency = :currency;

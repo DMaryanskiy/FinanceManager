@@ -10,10 +10,10 @@ BALANCE: |
         Your weekly limit - {} {}.
         Your monthly limit - {} {}.
 
-BALANCE_BAD: Choose a currency before checking balance and limits!
+CURRENCY_BAD: Choose a currency before checking balance, limits or adding expenses!
 
 CATEGORIES: |
-        Here's the list of all categories:
+        Here's the list of all categories for expenses:
         - {}.
         - {}.
         - {}.
@@ -25,3 +25,14 @@ CATEGORIES: |
         - {}.
         - {}.
         - {}.
+        Here's the list of all categories for income:
+        - {}.
+        - {}.
+        - {}.
+        - {}.
+
+EXPENSES_GOOD: Your {} was stored in DB.
+
+EXPENSES_BAD: Please write your message like this "expense 2 coffee" or "income 2400 salary".
+
+WRONG_TYPE: Please write type of transaction properly. It should be either "expense" or "income".

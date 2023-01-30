@@ -4,6 +4,8 @@ from telegram.ext import (
     ApplicationBuilder,
     CallbackQueryHandler,
     CommandHandler,
+    MessageHandler,
+    filters
 )
 
 import config
@@ -19,14 +21,19 @@ if not config.BOT_TOKEN:
 def main():
     app = ApplicationBuilder().token(config.BOT_TOKEN).build()
 
-    app.add_handler(CommandHandler("start", handlers.start))
+    COMMAND_HANDLERS = {
+        "start": handlers.start,
+        "currency": handlers.currency,
+        "balance": handlers.balance,
+        "category": handlers.category,
+    }
 
-    app.add_handler(CommandHandler("currency", handlers.currency))
+    for command_name, handler in COMMAND_HANDLERS.items():
+        app.add_handler(CommandHandler(command_name, handler))
+
     app.add_handler(CallbackQueryHandler(handlers.currency_button))
 
-    app.add_handler(CommandHandler("balance", handlers.balance))
-
-    app.add_handler(CommandHandler("category", handlers.category))
+    app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handlers.expenses))
 
     app.run_polling()
 
