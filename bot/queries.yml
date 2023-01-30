@@ -1,5 +1,10 @@
 GET_CURRENCIES: SELECT * FROM currency;
 
+RETRIEVE_CHOSEN_CURRENCY: >
+                            SELECT *
+                            FROM currency
+                            WHERE id = :id;
+
 RETRIEVE_BUDGET: SELECT *
                 FROM budget
                 WHERE currency = :currency;

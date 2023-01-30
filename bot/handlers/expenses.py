@@ -8,7 +8,7 @@ from singleton import CurrencySingleton
 
 async def expenses(update: Update, context: ContextTypes.DEFAULT_TYPE):
     currency = CurrencySingleton()
-    if not hasattr(currency, "data"):
+    if currency.instance not in {"1", "2", "3"}:
         await send_response(
             update,
             context,
@@ -25,5 +25,5 @@ async def expenses(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
     typ, amount, category = user_message.split()
-    response = await expenses_(category, typ.lower(), amount, currency.data)
+    response = await expenses_(category, typ.lower(), amount, currency.instance)
     await send_response(update, context, response)

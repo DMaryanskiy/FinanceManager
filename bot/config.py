@@ -6,21 +6,19 @@ from ruamel.yaml import YAML
 
 load_dotenv()
 
+# YAML configuration.
 yaml = YAML(typ="safe")
-PROPERTIES = yaml.load(open("messages.yml"))
-QUERIES = yaml.load(open("queries.yml"))
+PROPERTIES = yaml.load(open("messages.yml")) # Messages texts.
+QUERIES = yaml.load(open("queries.yml")) # SQL queries.
 
+# Telegram bot token configuration.
 BOT_TOKEN = os.getenv("BOT_TOKEN", "")
 
+# SQLite path configuration.
 BASE_DIR = Path(__file__).resolve().parent
 SQLITE_DB_FILE = BASE_DIR / "db.sqlite3"
 
-CURRENCY_MAP = {
-    "RUB": "1",
-    "EUR": "2",
-    "USD": "3",
-}
-
+# Map to determine the query to execute for updating balance.
 BALANCE_MAP = {
     "expense": QUERIES["REDUCE_BALANCE"],
     "income": QUERIES["ADD_BALANCE"]

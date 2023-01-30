@@ -1,4 +1,12 @@
-GREETINGS: Hi! I'm a bot which can help you to manage your expenses and income!
+GREETINGS: Hi! I'm a bot which can help you to manage your expenses and income! To know more about my commands type /help.
+
+HELP: |
+        Here's a short user guide for me:
+        1. Choose a currency. Each currency is a unique wallet with its own balance, limits, expenses and incomes. Just type /currency.
+        2. Check your balance and limits. Just type /balance.
+        3. Check all available categories. Just type /category.
+        4. After you've chosen a currency you may add your expenses and incomes. Just type a message consisting of three words - type of transaction, amount of money and a category. It may look like "expense 2 coffee" or "income 2400 salary".
+        TODO: add statistics and commands to manage your limits.
 
 CURRENCY: Choose a currency and wallet.
 

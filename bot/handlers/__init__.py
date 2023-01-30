@@ -3,6 +3,7 @@ from .currency import currency, currency_button
 from .budget import balance
 from .category import category
 from .expenses import expenses
+from .help import help
 
 __all__ = [
     start,
@@ -10,5 +11,6 @@ __all__ = [
     currency_button,
     balance,
     category,
-    expenses
+    expenses,
+    help
 ]

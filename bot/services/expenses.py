@@ -4,7 +4,7 @@ import logging
 import pytz
 
 from db import execute
-from config import QUERIES, CURRENCY_MAP, PROPERTIES, BALANCE_MAP
+from config import QUERIES, PROPERTIES, BALANCE_MAP
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ async def expenses_(category: str, typ: str, amount: str, currency: str) -> str:
             "amount": amount,
             "created": created,
             "category": category,
-            "currency": CURRENCY_MAP[currency]
+            "currency": currency
             },
             autocommit=False
         )
@@ -25,7 +25,7 @@ async def expenses_(category: str, typ: str, amount: str, currency: str) -> str:
         await execute(
             BALANCE_MAP[typ], {
             "amount": amount,
-            "currency": CURRENCY_MAP[currency]
+            "currency": currency
             },
             autocommit=False
         )

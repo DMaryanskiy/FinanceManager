@@ -4,9 +4,6 @@ import telegram
 from telegram import Chat, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 
-def _get_chat_id(update: Update) -> int:
-    return cast(Chat, update.effective_chat).id
-
 async def send_response(
     update: Update,
     context: ContextTypes.DEFAULT_TYPE,
@@ -22,3 +19,6 @@ async def send_response(
         args["reply_markup"] = keyboard
     
     await context.bot.send_message(**args)
+
+def _get_chat_id(update: Update) -> int:
+    return cast(Chat, update.effective_chat).id
