@@ -31,12 +31,12 @@ ADD_BALANCE: UPDATE budget
 
 DAILY_EXPENSE: SELECT SUM(amount) AS {}
                FROM {}
-               WHERE DATE(created) = DATE('now', 'localtime');
+               WHERE DATE(created) = DATE('now', 'localtime') AND currency = :currency;
 
 WEEKLY_EXPENSE: SELECT SUM(amount) AS {}
                 FROM {}
-                WHERE DATE(created) >= :created
+                WHERE DATE(created) >= :created AND currency = :currency;
 
 MONTHLY_EXPENSE: SELECT SUM(amount) AS {}
                  FROM {}
-                 WHERE DATE(created) >= :created
+                 WHERE DATE(created) >= :created AND currency = :currency;

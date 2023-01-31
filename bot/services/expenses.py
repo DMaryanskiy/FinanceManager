@@ -6,6 +6,8 @@ import pytz
 
 from db import execute, fetch_one
 from config import QUERIES, PROPERTIES, BALANCE_MAP
+from singleton import CurrencySingleton
+from .currency import retrieve_chosen_currency
 
 logger = logging.getLogger(__name__)
 
@@ -46,14 +48,15 @@ async def expenses_(category: str, typ: str, amount: str, currency: str) -> str:
         return PROPERTIES["WRONG_TYPE"]
 
 async def statistics_() -> Statistics:
+    currency = CurrencySingleton()
     statistics_dict = {}
     start_week = _get_start_of_week_str()
     now = _get_now_datetime()
     start_month = f"{now.year:04d}-{now.month:02d}-01"
     STAT_PARAMS = {
-        "daily": None,
-        "weekly": {"created": start_week},
-        "monthly": {"created": start_month}
+        "daily": {"currency": currency.instance},
+        "weekly": {"created": start_week, "currency": currency.instance},
+        "monthly": {"created": start_month, "currency": currency.instance}
     }
     for field in Statistics.__dataclass_fields__:
         stats_type, transaction_type = field.split("_")
