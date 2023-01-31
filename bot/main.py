@@ -26,7 +26,8 @@ def main():
         "currency": handlers.currency,
         "balance": handlers.balance,
         "category": handlers.category,
-        "help": handlers.help
+        "help": handlers.help,
+        "statistics": handlers.statistics
     }
 
     for command_name, handler in COMMAND_HANDLERS.items():

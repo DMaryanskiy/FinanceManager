@@ -1,14 +1,30 @@
+from dataclasses import dataclass
+
 from telegram import Update
 from telegram.ext import ContextTypes
 
 from config import PROPERTIES
 from .response import send_response
+from .utils import get_value_currency
 from services.budget import retrieve_balance
 from services.currency import retrieve_chosen_currency
 from singleton import CurrencySingleton
 
+@dataclass
+class BalanceData:
+    balance: int
+    daily: int
+    weekly: int
+    monthly: int
+
 async def balance(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    balance_data = await retrieve_balance()
+    budget = await retrieve_balance()
+    balance_data = BalanceData(
+        budget.balance,
+        budget.daily,
+        budget.weekly,
+        budget.monthly
+    )
     if not balance_data:
         await send_response(
             update,
@@ -22,9 +38,6 @@ async def balance(update: Update, context: ContextTypes.DEFAULT_TYPE):
             update,
             context,
             PROPERTIES["BALANCE"].format(
-                balance_data.balance, currency_code.currency,
-                balance_data.daily, currency_code.currency,
-                balance_data.weekly, currency_code.currency,
-                balance_data.monthly, currency_code.currency
+                *get_value_currency(balance_data, currency_code.currency)
             )
     )

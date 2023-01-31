@@ -2,7 +2,7 @@ from .start import start
 from .currency import currency, currency_button
 from .budget import balance
 from .category import category
-from .expenses import expenses
+from .expenses import expenses, statistics
 from .help import help
 
 __all__ = [
@@ -12,5 +12,6 @@ __all__ = [
     balance,
     category,
     expenses,
-    help
+    help,
+    statistics
 ]

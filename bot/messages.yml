@@ -6,7 +6,8 @@ HELP: |
         2. Check your balance and limits. Just type /balance.
         3. Check all available categories. Just type /category.
         4. After you've chosen a currency you may add your expenses and incomes. Just type a message consisting of three words - type of transaction, amount of money and a category. It may look like "expense 2 coffee" or "income 2400 salary".
-        TODO: add statistics and commands to manage your limits.
+        5. You may also check your statistics with all your expenses and incomes. Just type /statistics.
+        TODO: add commands to manage your limits.
 
 CURRENCY: Choose a currency and wallet.
 
@@ -44,3 +45,12 @@ EXPENSES_GOOD: Your {} was stored in DB.
 EXPENSES_BAD: Please write your message like this "expense 2 coffee" or "income 2400 salary".
 
 WRONG_TYPE: Please write type of transaction properly. It should be either "expense" or "income".
+
+STATISTICS: |
+            Your statistics:
+            - Today's expenses - {} {}.
+            - Today's income - {} {}.
+            - This week's expenses - {} {}.
+            - This week's income - {} {}.
+            - This month's expenses - {} {}.
+            - This month's income - {} {}.
