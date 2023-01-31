@@ -3,14 +3,14 @@ create table currency (
     currency varchar(255)
 );
 
-create table category_outcome (
-    codename varchar(255),
-    name varchar(255)
+create table category (
+    id bigint primary key,
+    codename varchar(255)
 );
 
-create table category_income (
-    codename varchar(255),
-    name varchar(255)
+create table transaction_type (
+    id bigint primary key,
+    codename varchar(255)
 );
 
 create table budget (
@@ -30,18 +30,11 @@ create table expense (
     created datetime,
     category varchar(255),
     currency integer,
-    FOREIGN KEY(category) REFERENCES category_outcome(codename),
-    FOREIGN KEY(currency) REFERENCES currency(id)
-);
+    transaction_type varchar(255),
 
-create table income (
-    id integer primary key,
-    amount integer,
-    created datetime,
-    category varchar(255),
-    currency integer,
-    FOREIGN KEY(category) REFERENCES category_income(codename),
-    FOREIGN KEY(currency) REFERENCES currency(id)
+    FOREIGN KEY(category) REFERENCES category(id),
+    FOREIGN KEY(currency) REFERENCES currency(id),
+    FOREIGN KEY(transaction_type) REFERENCES transaction_type(id)
 );
 
 insert into currency (id, currency)
@@ -50,26 +43,29 @@ values
     (2, "EUR"),
     (3, "USD");
 
-insert into category_outcome (codename, name)
+insert into transaction_type (id, codename)
 values
-    ("products", "продукты"),
-    ("coffee", "кофе"),
-    ("cafe", "кафе"),
-    ("restaurant", "рестораны"),
-    ("subscription", "подписки"),
-    ("gifts", "подарки"),
-    ("network", "связь и интернет"),
-    ("others", "другое"),
-    ("transport", "транспорт"),
-    ("games", "игры"),
-    ("travel", "путешествия");
+    (1, "expense"),
+    (2, "income");
 
-insert into category_income (codename, name)
+insert into category (id, codename)
 values
-    ("salary", "праздники"),
-    ("festival", "праздники"),
-    ("social", "пособия"),
-    ("family", "семья");
+    (1, "products"),
+    (2, "coffee"),
+    (3, "cafe"),
+    (4, "restaurant"),
+    (5, "subscription"),
+    (6, "gifts"),
+    (7, "network"),
+    (8, "transport"),
+    (9, "games"),
+    (10, "travel"),
+    (11, "other expenses"),
+    (12, "salary"),
+    (13, "festival"),
+    (14, "social"),
+    (15, "family"),
+    (16, "other income");
 
 insert into budget (id, currency, daily, weekly, monthly, balance)
 values

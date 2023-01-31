@@ -16,7 +16,7 @@ class Budget:
 
 async def retrieve_balance() -> Optional[Budget]:
     currency = CurrencySingleton()
-    if currency.instance not in {"1", "2", "3"}:
+    if currency.currency not in {"1", "2", "3"}:
         return None
-    budget = await fetch_one(QUERIES["RETRIEVE_BUDGET"], {"currency": currency.instance})
+    budget = await fetch_one(QUERIES["RETRIEVE_BUDGET"], {"currency": currency.currency})
     return Budget(**budget)

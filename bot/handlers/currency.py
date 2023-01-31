@@ -22,7 +22,7 @@ async def currency_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
     # storing currency code to transmit through other parts of project.
     cur = CurrencySingleton()
-    cur.instance = query.data
+    cur.currency = query.data
     currency_code = await retrieve_chosen_currency(query.data)
     await query.edit_message_text(
         text=PROPERTIES["CURRENCY_BUTTON"].format(currency_code.currency),

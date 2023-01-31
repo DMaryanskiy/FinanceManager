@@ -8,13 +8,11 @@ RETRIEVE_BUDGET: SELECT *
                 FROM budget
                 WHERE currency = :currency;
 
-GET_CATEGORIES_EXPENSE: SELECT * FROM category_outcome;
+GET_CATEGORIES: SELECT * FROM category;
 
-GET_CATEGORIES_INCOME: SELECT * FROM category_income;
-
-ADD_EXPENSE: INSERT INTO {} (amount, created, category, currency)
+ADD_EXPENSE: INSERT INTO expense (amount, created, category, currency, transaction_type)
              values
-                 (:amount, :created, :category, :currency);
+                 (:amount, :created, :category, :currency, :transaction_type);
 
 REDUCE_BALANCE: UPDATE budget
                 SET
@@ -30,13 +28,19 @@ ADD_BALANCE: UPDATE budget
              WHERE currency = :currency;
 
 DAILY_EXPENSE: SELECT SUM(amount) AS {}
-               FROM {}
-               WHERE DATE(created) = DATE('now', 'localtime') AND currency = :currency;
+               FROM expense
+               WHERE DATE(created) = DATE('now', 'localtime') AND
+               currency = :currency AND
+               transaction_type = :transaction_type;
 
 WEEKLY_EXPENSE: SELECT SUM(amount) AS {}
-                FROM {}
-                WHERE DATE(created) >= :created AND currency = :currency;
+                FROM expense
+                WHERE DATE(created) >= :created AND
+                currency = :currency AND
+                transaction_type = :transaction_type;
 
 MONTHLY_EXPENSE: SELECT SUM(amount) AS {}
-                 FROM {}
-                 WHERE DATE(created) >= :created AND currency = :currency;
+                 FROM expense
+                 WHERE DATE(created) >= :created AND
+                 currency = :currency AND
+                 transaction_type = :transaction_type;

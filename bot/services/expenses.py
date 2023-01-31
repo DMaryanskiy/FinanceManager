@@ -5,9 +5,8 @@ from dataclasses import dataclass
 import pytz
 
 from db import execute, fetch_one
-from config import QUERIES, PROPERTIES, BALANCE_MAP
+from config import QUERIES, PROPERTIES
 from singleton import CurrencySingleton
-from .currency import retrieve_chosen_currency
 
 logger = logging.getLogger(__name__)
 
@@ -20,22 +19,28 @@ class Statistics:
     monthly_expense: int | None
     monthly_income: int | None
 
-async def expenses_(category: str, typ: str, amount: str, currency: str) -> str:
+TRANSACTION_MAP = {
+    "expense": (1, QUERIES["REDUCE_BALANCE"]),
+    "income": (2, QUERIES["ADD_BALANCE"]),
+}
+
+async def expenses_(category: str, typ: str, amount: int, currency: str) -> str:
     created = _get_now_datetime_str()
-    if typ == "expense" or typ == "income":
+    if typ in {"expense", "income"}:
         await execute("BEGIN")
         await execute(
-            QUERIES["ADD_EXPENSE"].format(typ), {
+            QUERIES["ADD_EXPENSE"], {
             "amount": amount,
             "created": created,
             "category": category,
-            "currency": currency
+            "currency": currency,
+            "transaction_type": TRANSACTION_MAP[typ][0]
             },
             autocommit=False
         )
         logger.info("Added expense.")
         await execute(
-            BALANCE_MAP[typ], {
+            TRANSACTION_MAP[typ][1], {
             "amount": amount,
             "currency": currency
             },
@@ -53,16 +58,21 @@ async def statistics_() -> Statistics:
     start_week = _get_start_of_week_str()
     now = _get_now_datetime()
     start_month = f"{now.year:04d}-{now.month:02d}-01"
+    COMMON_PARAMS = {
+        "currency": currency.currency,
+    }
     STAT_PARAMS = {
-        "daily": {"currency": currency.instance},
-        "weekly": {"created": start_week, "currency": currency.instance},
-        "monthly": {"created": start_month, "currency": currency.instance}
+        "daily": COMMON_PARAMS,
+        "weekly": {"created": start_week} | COMMON_PARAMS,
+        "monthly": {"created": start_month} | COMMON_PARAMS
     }
     for field in Statistics.__dataclass_fields__:
         stats_type, transaction_type = field.split("_")
         temp = await fetch_one(
-            QUERIES[f"{stats_type.upper()}_EXPENSE"].format(field, transaction_type),
-            STAT_PARAMS[stats_type]
+            QUERIES[f"{stats_type.upper()}_EXPENSE"].format(field),
+            STAT_PARAMS[stats_type] | {
+                "transaction_type": TRANSACTION_MAP[transaction_type][0]
+            }
         )
         if not temp[field]:
             temp[field] = 0

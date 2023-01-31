@@ -17,9 +17,3 @@ BOT_TOKEN = os.getenv("BOT_TOKEN", "")
 # SQLite path configuration.
 BASE_DIR = Path(__file__).resolve().parent
 SQLITE_DB_FILE = BASE_DIR / "db.sqlite3"
-
-# Map to determine the query to execute for updating balance.
-BALANCE_MAP = {
-    "expense": QUERIES["REDUCE_BALANCE"],
-    "income": QUERIES["ADD_BALANCE"]
-}
