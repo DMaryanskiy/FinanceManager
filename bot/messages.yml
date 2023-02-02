@@ -59,3 +59,5 @@ STATISTICS: |
 LIMITS_UPDATED: Your {} limit was updated.
 
 LIMIT_BAD: Please, write type of limit properly. It should be "daily", "weekly" or "monthly".
+
+CATEGORY_BAD: Please, write category properly. To check all categories just type /category.

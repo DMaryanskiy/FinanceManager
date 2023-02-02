@@ -10,6 +10,10 @@ RETRIEVE_BUDGET: SELECT *
 
 GET_CATEGORIES: SELECT * FROM category;
 
+RETRIVE_CATEGORY: SELECT *
+                  FROM category
+                  WHERE codename = :codename;
+
 ADD_EXPENSE: INSERT INTO expense (amount, created, category, currency, transaction_type)
              values
                  (:amount, :created, :category, :currency, :transaction_type);

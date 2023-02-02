@@ -7,6 +7,7 @@ import pytz
 from db import execute, fetch_one
 from config import QUERIES, PROPERTIES
 from singleton import CurrencySingleton
+from .category import retrieve_category
 
 logger = logging.getLogger(__name__)
 
@@ -24,16 +25,18 @@ TRANSACTION_MAP = {
     "income": (2, QUERIES["ADD_BALANCE"]),
 }
 
-# TODO: handle categories properly.
 async def expenses_limits_(category: str, typ: str, amount: int, currency: str) -> str | None:
     created = _get_now_datetime_str()
+    category_id = await retrieve_category(category)
+    if not category_id:
+        return PROPERTIES["CATEGORY_BAD"]
     if typ in {"expense", "income"}:
         await execute("BEGIN")
         await execute(
             QUERIES["ADD_EXPENSE"], {
             "amount": amount,
             "created": created,
-            "category": category,
+            "category": category_id.id,
             "currency": currency,
             "transaction_type": TRANSACTION_MAP[typ][0]
             },
