@@ -3,33 +3,26 @@ from telegram.ext import ContextTypes
 
 from config import PROPERTIES
 from .response import send_response
-from .utils import get_value_currency
-from services.expenses import expenses_, statistics_
+from .utils import get_value_currency, validate_currency, validate_message
+from services.expenses import expenses_limits_, statistics_
 from services.currency import retrieve_chosen_currency
 from singleton import CurrencySingleton
 
-async def expenses(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def expenses_limits(update: Update, context: ContextTypes.DEFAULT_TYPE):
     currency = CurrencySingleton()
-    if currency.currency not in {"1", "2", "3"}:
-        await _send_currency_bad_response(update, context)
+    if not await validate_message(update, context, currency):
         return
-
+    
     user_message = update.message.text
-    if len(user_message.split()) != 3:
-        await send_response(
-            update,
-            context,
-            PROPERTIES["EXPENSES_BAD"]
-        )
-        return
     typ, amount, category = user_message.split()
-    response = await expenses_(category, typ.lower(), amount, currency.currency)
-    await send_response(update, context, response)
+    response = await expenses_limits_(category, typ.lower(), amount, currency.currency)
+    if response:
+        await send_response(update, context, response)
+    return
 
 async def statistics(update: Update, context: ContextTypes.DEFAULT_TYPE):
     currency = CurrencySingleton()
-    if currency.currency not in {"1", "2", "3"}:
-        await _send_currency_bad_response(update, context)
+    if not await validate_currency(update, context, currency):
         return
     currency_code = await retrieve_chosen_currency(currency.currency)
     statistics = await statistics_()
@@ -40,11 +33,3 @@ async def statistics(update: Update, context: ContextTypes.DEFAULT_TYPE):
             *get_value_currency(statistics, currency_code.currency)
         )
     )
-
-async def _send_currency_bad_response(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await send_response(
-        update,
-        context,
-        PROPERTIES["CURRENCY_BAD"]
-    )
-    return

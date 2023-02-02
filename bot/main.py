@@ -35,7 +35,7 @@ def main():
 
     app.add_handler(CallbackQueryHandler(handlers.currency_button))
 
-    app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handlers.expenses))
+    app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handlers.expenses_limits))
 
     app.run_polling()
 

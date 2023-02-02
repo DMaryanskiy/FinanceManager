@@ -24,7 +24,8 @@ TRANSACTION_MAP = {
     "income": (2, QUERIES["ADD_BALANCE"]),
 }
 
-async def expenses_(category: str, typ: str, amount: int, currency: str) -> str:
+# TODO: handle categories properly.
+async def expenses_limits_(category: str, typ: str, amount: int, currency: str) -> str | None:
     created = _get_now_datetime_str()
     if typ in {"expense", "income"}:
         await execute("BEGIN")
@@ -49,6 +50,21 @@ async def expenses_(category: str, typ: str, amount: int, currency: str) -> str:
         logger.info("Updated balance.")
         await execute("COMMIT")
         return PROPERTIES["EXPENSES_GOOD"].format(typ)
+    elif typ == "update":
+        if category not in {"daily", "weekly", "monthly"}:
+            return PROPERTIES["LIMIT_BAD"]
+        await execute("BEGIN")
+        await execute(
+            QUERIES["UPDATE_LIMIT"].format(category),
+            {
+                "value": amount,
+                "currency": currency
+            },
+            autocommit=False
+        )
+        logger.info(f"{category.capitalize()} limit updated.")
+        await execute("COMMIT")
+        return PROPERTIES["LIMITS_UPDATED"].format(category)
     else:
         return PROPERTIES["WRONG_TYPE"]
 
