@@ -48,3 +48,19 @@ MONTHLY_EXPENSE: SELECT SUM(amount) AS {}
                  WHERE DATE(created) >= :created AND
                  currency = :currency AND
                  transaction_type = :transaction_type;
+
+ADD_USER: INSERT INTO telegram_user (username, firstname, lastname)
+          VALUES
+            (:username, :firstname, :lastname)
+          RETURNING id;
+
+GET_USER: SELECT id
+          FROM telegram_user
+          WHERE username = :username;
+
+CREATE_BALANCE: INSERT INTO budget (currency, balance, telegram_user)
+                VALUES (
+                    (1, 0, :id),
+                    (2, 0, :id),
+                    (3, 0, :id)
+                );
