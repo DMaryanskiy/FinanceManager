@@ -14,6 +14,8 @@ QUERIES = yaml.load(open("queries.yml")) # SQL queries.
 # Telegram bot token configuration.
 BOT_TOKEN = os.getenv("BOT_TOKEN", "")
 
-# SQLite path configuration.
+# Base path configuration.
 BASE_DIR = Path(__file__).resolve().parent
-SQLITE_DB_FILE = BASE_DIR / "db.sqlite3"
+
+# Database init.
+SQLALCHEMY_DATABASE_URL = os.getenv("SQLALCHEMY_DATABASE_URL", "")

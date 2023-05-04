@@ -15,14 +15,12 @@ CURRENCY_BUTTON: You've chosen {} currency. Now you can add expenses and check y
 
 BALANCE: |
         Your balance - {} {}.
-        Your daily limit - {} {}.
-        Your weekly limit - {} {}.
-        Your monthly limit - {} {}.
 
 CURRENCY_BAD: Choose a currency before checking balance, limits or adding expenses!
 
 CATEGORIES: |
         Here's the list of all categories for expenses:
+        - {}.
         - {}.
         - {}.
         - {}.

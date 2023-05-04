@@ -53,21 +53,21 @@ async def expenses_limits_(category: str, typ: str, amount: int, currency: str) 
         logger.info("Updated balance.")
         await execute("COMMIT")
         return PROPERTIES["EXPENSES_GOOD"].format(typ)
-    elif typ == "update":
-        if category not in {"daily", "weekly", "monthly"}:
-            return PROPERTIES["LIMIT_BAD"]
-        await execute("BEGIN")
-        await execute(
-            QUERIES["UPDATE_LIMIT"].format(category),
-            {
-                "value": amount,
-                "currency": currency
-            },
-            autocommit=False
-        )
-        logger.info(f"{category.capitalize()} limit updated.")
-        await execute("COMMIT")
-        return PROPERTIES["LIMITS_UPDATED"].format(category)
+    # elif typ == "update":
+    #     if category not in {"daily", "weekly", "monthly"}:
+    #         return PROPERTIES["LIMIT_BAD"]
+    #     await execute("BEGIN")
+    #     await execute(
+    #         QUERIES["UPDATE_LIMIT"].format(category),
+    #         {
+    #             "value": amount,
+    #             "currency": currency
+    #         },
+    #         autocommit=False
+    #     )
+    #     logger.info(f"{category.capitalize()} limit updated.")
+    #     await execute("COMMIT")
+    #     return PROPERTIES["LIMITS_UPDATED"].format(category)
     else:
         return PROPERTIES["WRONG_TYPE"]
 

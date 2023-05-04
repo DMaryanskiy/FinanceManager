@@ -48,8 +48,3 @@ MONTHLY_EXPENSE: SELECT SUM(amount) AS {}
                  WHERE DATE(created) >= :created AND
                  currency = :currency AND
                  transaction_type = :transaction_type;
-
-UPDATE_LIMIT: UPDATE budget
-              SET
-              {} = :value
-              WHERE currency = :currency;
