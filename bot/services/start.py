@@ -1,11 +1,12 @@
 import logging
 
-from sqlalchemy.ext.asyncio import AsyncResult
+from sqlalchemy.ext.asyncio import AsyncResult, AsyncSession
 from sqlalchemy.exc import IntegrityError
 from telegram import Update
 
 from db.db import get_session, session_commit
 from db import models
+from singleton import SessionSingleton
 from .exceptions import HTTPException
 
 logger = logging.getLogger(__name__)
@@ -16,9 +17,8 @@ async def get_or_create_user(update: Update):
     If not, it creates user and budget instances in DB.
     """
     # TODO: find a way to fix session receiving operation 
-    session = None
-    async for s in get_session():
-        session = s
+    ss = SessionSingleton()
+    session = ss.session
 
     user = update.message.from_user
     user_exists_query = models.telegram_user.select().where(models.telegram_user.c.username == user.username)

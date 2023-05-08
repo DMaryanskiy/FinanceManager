@@ -13,12 +13,9 @@ from singleton import CurrencySingleton
 @dataclass
 class BalanceData:
     balance: int
-    daily: int
-    weekly: int
-    monthly: int
 
 async def balance(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    budget = await retrieve_balance()
+    budget = await retrieve_balance(update)
     if not budget:
         await send_response(
             update,
@@ -27,10 +24,7 @@ async def balance(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
     balance_data = BalanceData(
-        budget.balance,
-        budget.daily,
-        budget.weekly,
-        budget.monthly
+        budget.balance
     )
     currency = CurrencySingleton()
     currency_code = await retrieve_chosen_currency(currency.currency)
@@ -38,6 +32,6 @@ async def balance(update: Update, context: ContextTypes.DEFAULT_TYPE):
         update,
         context,
         PROPERTIES["BALANCE"].format(
-            *get_value_currency(balance_data, currency_code.currency)
+            *get_value_currency(balance_data, currency_code.currency_code)
         )
     )

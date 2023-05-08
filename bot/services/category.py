@@ -1,7 +1,10 @@
 from dataclasses import dataclass
 
-from db import fetch_all, fetch_one
+from sqlalchemy.ext.asyncio import AsyncResult
+
+from db import models
 from config import QUERIES
+from singleton import SessionSingleton
 
 @dataclass
 class Category:
@@ -9,11 +12,15 @@ class Category:
     codename: str
 
 async def get_all_categories() -> list[Category]:
-    categories = await fetch_all(QUERIES["GET_CATEGORIES"])
-    return [Category(**category) for category in categories]
+    session = SessionSingleton().session
+    categories_query = models.category.select()
+    categories_rows: AsyncResult = await session.execute(categories_query)
+    categories = categories_rows.all()
+    return [Category(**category._asdict()) for category in categories]
 
 async def retrieve_category(codename: str) -> Category:
-    category = await fetch_one(QUERIES["RETRIVE_CATEGORY"], {"codename": codename})
-    if category:
-        return Category(**category)
-    return category
+    session = SessionSingleton().session
+    categories_query = models.category.select().where(models.category.c.codename == codename)
+    categories_rows: AsyncResult = await session.execute(categories_query)
+    category = categories_rows.one()
+    return Category(**category._asdict())

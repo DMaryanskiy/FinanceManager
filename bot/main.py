@@ -12,7 +12,8 @@ from telegram.ext import (
 
 import config
 import handlers
-from db.db import init_db, insert_prereq
+import singleton
+from db.db import init_db, insert_prereq, get_session
 
 logging.basicConfig(
     filename="main.log",
@@ -29,14 +30,18 @@ async def startup() -> None:
     await init_db()
     logger.info("bot started")
 
+    ss = singleton.SessionSingleton()
+    async for s in get_session():
+        ss.session = s
+
 def bot_start():
     app = ApplicationBuilder().token(config.BOT_TOKEN).build()
 
     COMMAND_HANDLERS = {
         "start": handlers.start,
-    #     "currency": handlers.currency,
-    #     "balance": handlers.balance,
-    #     "category": handlers.category,
+        "currency": handlers.currency,
+        "balance": handlers.balance,
+        "category": handlers.category,
         "help": handlers.help,
     #     "statistics": handlers.statistics
     }
@@ -44,7 +49,7 @@ def bot_start():
     for command_name, handler in COMMAND_HANDLERS.items():
         app.add_handler(CommandHandler(command_name, handler))
 
-    # app.add_handler(CallbackQueryHandler(handlers.currency_button))
+    app.add_handler(CallbackQueryHandler(handlers.currency_button))
 
     # app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handlers.expenses_limits))
 
@@ -70,7 +75,7 @@ def main():
     except Exception:
         import traceback
 
-        logger.error(traceback.format_exc())
+        logger.warning(traceback.format_exc())
 
 if __name__ == "__main__":
     main()

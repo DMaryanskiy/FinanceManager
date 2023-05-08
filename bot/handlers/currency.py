@@ -25,7 +25,7 @@ async def currency_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
     cur.currency = query.data
     currency_code = await retrieve_chosen_currency(query.data)
     await query.edit_message_text(
-        text=PROPERTIES["CURRENCY_BUTTON"].format(currency_code.currency),
+        text=PROPERTIES["CURRENCY_BUTTON"].format(currency_code.currency_code),
         parse_mode=telegram.constants.ParseMode.HTML,
     )
 
@@ -33,7 +33,7 @@ async def _currency_keyboard() -> InlineKeyboardMarkup:
     currencies = await get_all_currencies()
     keyboard = [
         [
-            InlineKeyboardButton(currency.currency, callback_data=currency.id) for currency in currencies
+            InlineKeyboardButton(currency.currency_code, callback_data=currency.id) for currency in currencies
         ]
     ]
     return InlineKeyboardMarkup(keyboard)

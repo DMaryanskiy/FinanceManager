@@ -1,17 +1,30 @@
+import logging
 from dataclasses import dataclass
 
-from db import fetch_all, fetch_one
-from config import QUERIES
+from sqlalchemy.ext.asyncio import AsyncResult, AsyncSession
+
+from db import models
+from db.db import get_session
+from singleton import SessionSingleton
+
+logger = logging.getLogger(__name__)
+
 
 @dataclass
 class Currency:
     id: int
-    currency: str
+    currency_code: str
 
 async def get_all_currencies() -> list[Currency]:
-    currencies = await fetch_all(QUERIES["GET_CURRENCIES"])
-    return [Currency(**currency) for currency in currencies]
+    session = SessionSingleton().session
+    currencies_query = models.currency.select()
+    currencies_rows: AsyncResult = await session.execute(currencies_query)
+    currencies = currencies_rows.all()
+    return [Currency(**currency._asdict()) for currency in currencies]
 
 async def retrieve_chosen_currency(id: str) -> Currency:
-    currency = await fetch_one(QUERIES["RETRIEVE_CHOSEN_CURRENCY"], {"id": id})
-    return Currency(**currency)
+    session = SessionSingleton().session
+    currencies_query = models.currency.select().where(models.currency.c.id == int(id))
+    currencies_rows: AsyncResult = await session.execute(currencies_query)
+    currency = currencies_rows.one()
+    return Currency(**currency._asdict())
